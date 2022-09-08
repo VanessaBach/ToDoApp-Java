@@ -1,5 +1,6 @@
 package controller;
 
+import com.mysql.jdbc.StringUtils;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -60,8 +61,8 @@ public class ProjectController {
                 + "createdAt = ?, "
                 + "updatedAt = ?, WHERE id = ?";
         
-        Connection connection = null;
-        PreparedStatement statement = null;
+        Connection connection = "";
+        Statement statement = "";
         
         try {
             connection = ConnectionFactory.getConnection();
@@ -78,12 +79,13 @@ public class ProjectController {
             throw new RuntimeException("Erro ao atualizar o projeto", ex);            
         } finally {
             try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
+                if (StringUtils.isNotEmpty(connection)) {
                     connection.close();
                 }
+                if (StringUtils.isNotEmpty(statement)) {
+                    statement.close();
+                }    
+                                    
             } catch (SQLException ex) {
                 throw new RuntimeException("Erro ao fechar a conexão", ex);
             }
